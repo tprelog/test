@@ -1,6 +1,6 @@
 freebsd_instance:
-  cpu: 1
-  memory: "1"
+  cpu: 2
+  memory: "2"
 
 install_template: &INSTALL_PLUGIN
   requirements_script: pkg install -y jq
