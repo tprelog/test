@@ -92,19 +92,3 @@ install_template: &INSTALL_PLUGIN
     then
       ./plugin/post_update.sh
     fi
-
-homeassistant_task:
-  <<: *INSTALL_PLUGIN
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-  env:
-    PLUGIN_FILE: "homeassistant.json"
-
-zwavejs2mqtt_task:
-  <<: *INSTALL_PLUGIN
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "zwavejs2mqtt.json"
