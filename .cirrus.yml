@@ -93,37 +93,6 @@ install_template: &INSTALL_PLUGIN
       ./plugin/post_update.sh
     fi
 
-
-esphome_task:
-  <<: *INSTALL_PLUGIN
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "esphome.json"
-
-gogs_task:
-  <<: *INSTALL_PLUGIN
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "gogs.json"
-
-homeassistant_task:
-  <<: *INSTALL_PLUGIN
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "homeassistant.json"
-
 mosquitto_task:
   <<: *INSTALL_PLUGIN
   matrix:
@@ -133,31 +102,3 @@ mosquitto_task:
         image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "mosquitto.json"
-
-node-red_task:
-  <<: *INSTALL_PLUGIN
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "node-red.json"
-
-tasmoadmin_task:
-  <<: *INSTALL_PLUGIN
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "tasmoadmin.json"
-
-zwavejs2mqtt_task:
-  <<: *INSTALL_PLUGIN
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "zwavejs2mqtt.json"
