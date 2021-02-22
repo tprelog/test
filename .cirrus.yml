@@ -97,6 +97,6 @@ homeassistant_task:
   <<: *INSTALL_PLUGIN
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12.2
+        image_family: freebsd-12.1
   env:
     PLUGIN_FILE: "homeassistant.json"
