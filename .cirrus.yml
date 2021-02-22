@@ -2,5 +2,15 @@ freebsd_instance:
   cpu: 4
   memory: "4"
 
-test_task:
-  test_scrip: echo "hello world"
+task:
+    # Basic metadata:
+    name: hello_world
+
+    # The build machine:
+    freebsd_instance:
+        image_family: freebsd-12-1
+
+    # No environment variables provided.
+
+    # Instructions:
+    test_script: echo "hello world"
