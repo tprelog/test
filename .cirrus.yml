@@ -1,0 +1,6 @@
+freebsd_instance:
+  cpu: 4
+  memory: "4"
+
+test_task:
+  test_scrip: echo "hello world"
