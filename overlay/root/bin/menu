@@ -1,0 +1,191 @@
+#!/usr/bin/env bash
+
+# A menu driven shell script, hacked together from internet samples and other shit.
+# The console menu for the TrueNAS Core Community Plugin, Home Assistant Core, is
+# just a simple menu, nothing more than a shortcut to execute basic service commands.
+
+main_menu="0"
+
+# ----------------------------------
+# Step #2: User defined function
+# ----------------------------------
+
+show_banner_0() {
+  clear
+  echo "${blu}"
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  echo "  Console Menu for TrueNAS Core Community Plugin, Home Assistant Core  "
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  echo -e "${end}\n"
+}
+
+show_banner_1() {
+  clear
+  echo "${blu}"
+  echo '   _  _  ___  __  __ ___      _   ___ ___ ___ ___ _____ _   _  _ _____  '
+  echo '  | || |/ _ \|  \/  | __|    /_\ / __/ __|_ _/ __|_   _/_\ | \| |_   _| '
+  echo '  | __ | (_) | |\/| | _|    / _ \\__ \__ \| |\__ \ | |/ _ \| .` | | |   '
+  echo '  |_||_|\___/|_|  |_|___|  /_/ \_\___/___/___|___/ |_/_/ \_\_|\_| |_|   '
+  echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+  echo "               MANAGE THE HOME ASSISTANT CORE SERVICE                   "
+  echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+  echo -e "${end}"
+}
+
+show_banner_2() {
+  clear
+  echo "${blu}"
+  echo '        ___ ___  _  _ ___ ___ ___ _   _ ___    _ _____ ___  ___  '
+  echo '       / __/ _ \| \| | __|_ _/ __| | | | _ \  /_\_   _/ _ \| _ \ '
+  echo '      | (_| (_) | .` | _| | | (_ | |_| |   / / _ \| || (_) |   / '
+  echo '       \___\___/|_|\_|_| |___\___|\___/|_|_\/_/ \_\_| \___/|_|_\ '
+  echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+  echo "                    MANAGE THE FILE EDITOR SERVICE                     "
+  echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+  echo -e "${end}"
+}
+
+show_banner_3() {
+  clear
+  echo "${blu}"
+  echo '              _   ___ ___ ___   _   ___ __  __  ___  _  _  '
+  echo '             /_\ | _ \ _ \   \ /_\ | __|  \/  |/ _ \| \| | '
+  echo '            / _ \|  _/  _/ |) / _ \| _|| |\/| | (_) | .` | '
+  echo '           /_/ \_\_| |_| |___/_/ \_\___|_|  |_|\___/|_|\_| '
+  echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+  echo "                     MANAGE THE APPDAEMON SERVICE                      "
+  echo '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+  echo -e "${end}"
+}
+
+service_menu() {
+  ## Show a menu and run basic commands for each of the plugin's services.
+  local _cmd_ _commands_ _ans_
+  ## These are commands that all service menus should have.
+  _commands_="status restart upgrade start stop test_service"
+  ## Home Assistant Core has an extra check_config option in it's menu.
+  [[ "${1}" == "homeassistant" ]] && _commands_="${_commands_} check_config"
+  ## Optional services can be installed or removed, depending on their existing state.
+  if [ "${1}" == "appdaemon" ] || [ "${1}" == "configurator" ]; then
+    [ -d "$(sysrc -n "${1}"_venv 2>/dev/null)" ] \
+    && _commands_="${_commands_} remove_service" || _commands_="${_commands_} install_service"
+  fi
+  ## Prompt for user input and run command when provided.
+  PS3=""$'\n'"${blu}Select: ${end}" ; echo
+  select _cmd_ in "main_menu" ${_commands_} "exit_menu"; do
+    case "${_cmd_}" in
+      "main_menu")
+        show_menu="NO" ; break
+        ;;
+      "exit_menu")
+        goodbye ; exit 0
+        ;;
+      "install_service")
+        menu_service install "${1}"
+        pause ; break
+        ;;
+      "remove_service")
+        menu_service remove "${1}"
+        pause ; break
+        ;;
+      "test_service")
+        service "${1}" test
+        pause ; break
+        ;;
+      "status"|"restart"|"upgrade"|"start"|"stop"|"check_config")
+        service "${1}" "${_cmd_}"
+        pause ; break
+        ;;
+      ## Anything else is an invalid option.
+      *) echo -e "Sorry, that is not an option" && sleep 1 
+        ;;
+    esac
+  done
+}
+
+show_menu_0() {
+# clear --> moved to show_banner
+  echo " 1) Home Assistant Core"
+  echo " 2) Configurator (File Editor)"
+  echo " 3) AppDaemon / HADashboard"
+  echo -e "\n 0) Exit Menu \n"
+}
+
+read_options() {
+  local choice
+  echo "${blu}" ; read -rp "Select: " choice ; echo "${end}"
+  case "${choice}" in
+  ## Select which menu to load, or command to run
+    "1") # Home Assistant Core
+      show_menu="YES"
+      while [ ${show_menu} == "YES" ]; do
+        show_banner_1
+        service_menu homeassistant
+      done
+      ;;
+    "2") # Hass-configurator (File Editor)
+      show_menu="YES"
+      while [ ${show_menu} == "YES" ]; do
+        show_banner_2
+        service_menu configurator
+      done
+      ;;
+    "3") # AppDaemon / HA-Dashboard
+      show_menu="YES"
+      while [ ${show_menu} == "YES" ]; do
+        show_banner_3
+        service_menu appdaemon
+      done
+      ;;
+    ## Install HACS (Custom integration for Home Assistant)
+    [iI]"nstall "[hH][aA][cC][sS])
+      install_hacs
+      pause ; return
+      ;;
+    ## Exit menu, returns to the jail's console.
+    [eE]|[eE][xX][iI][tT]|[qQ]|[cC]|[cC]|[oN][sS][oO][lL][eE]|"0")
+      goodbye
+      ;;
+    ## Anything else is invalid option.
+    *) echo -e "Sorry, that is not an option" && sleep 1
+      ;;
+  esac
+}
+
+pause() {
+  echo ; read -rp "Press ENTER to continue..." fackEnterKey
+}
+
+goodbye() {
+  echo -e "${end}"
+  clear ; exit
+}
+
+load_colors() {
+  blu=$'\e[38;5;39m'
+  orn=$'\e[38;5;208m'
+  red=$'\e[1;31m'
+  end=$'\e[0m'
+} ; load_colors # Only loaded once
+
+# ----------------------------------------------
+# Step #3: Trap CTRL+C, CTRL+Z and quit singles
+# ----------------------------------------------
+
+# Define and use traps to clean up all temp files
+#  Trap on --- use 'kill -l' to list all
+#   1 = SIGHUP (Hangup of controlling terminal or death of parent)
+#   2 = SIGINT (Interrupted by the keyboard)
+#   3 = SIGQUIT (Quit signal from keyboard)
+#   6 = SIGABRT (Aborted by abort(3))
+#
+## It's a trap! goodbye
+trap goodbye 1 2 3 6
+
+# -----------------------------------
+# Step #4: Main logic - infinite loop
+# ------------------------------------
+
+while true; do
+  show_banner_0 && show_menu_${main_menu} && read_options
+done
