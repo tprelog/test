@@ -94,12 +94,28 @@ install_template: &INSTALL_PLUGIN
       ./plugin/post_update.sh
     fi
 
-homeassistant_task:
+# Tasks are WET only to show a badge for each version of FreeBSD
+# Is there another way to do this, and be DRY about it ?
+homeassistant-11-4_task:
   <<: *INSTALL_PLUGIN
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-1-snap
-#    - freebsd_instance:
-#        image_family: freebsd-12-2
+        image_family: freebsd-11-4
+  env:
+    PLUGIN_FILE: "homeassistant.json"
+
+homeassistant-12-1_task:
+  <<: *INSTALL_PLUGIN
+  matrix:
+    - freebsd_instance:
+        image_family: freebsd-12-1
+  env:
+    PLUGIN_FILE: "homeassistant.json"
+
+homeassistant-12-2_task:
+  <<: *INSTALL_PLUGIN
+  matrix:
+    - freebsd_instance:
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "homeassistant.json"
