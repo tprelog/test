@@ -1,6 +1,6 @@
 {
   "name": "homeassistant",
-  "release": "12.1-RELEASE",
+  "release": "12.2-RELEASE",
   "artifact": "https://github.com/tprelog/test.git",
   "official": "false",
   "devfs_ruleset": {
@@ -30,7 +30,10 @@
     "libxslt",
     "pkgconf",
     "python38",
-    "py38-sqlite3"
+    "py38-sqlite3",
+    "sudo",
+    "wget",
+    "zip"
   ],
   "packagesite": "http://pkg.FreeBSD.org/${ABI}/latest",
   "fingerprints": {
