@@ -32,7 +32,7 @@
     "python38",
     "py38-sqlite3"
   ],
-  "packagesite": "http://pkg.FreeBSD.org/${ABI}/quarterly",
+  "packagesite": "http://pkg.FreeBSD.org/${ABI}/latest",
   "fingerprints": {
     "plugin-default": [
       {
