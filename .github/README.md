@@ -1,7 +1,6 @@
 # iocage-test
 
 [repo]:https://github.com/tprelog/iocage-homeassistant
-
 [results]:https://cirrus-ci.com/github/tprelog/test
 
 [11-4]:https://api.cirrus-ci.com/github/tprelog/test.svg?task=homeassistant-11-4&branch
@@ -11,9 +10,9 @@
 [![version_info][plugin]][repo]
 [![version_info][homeassistant]][repo]
 
-[![Install Status][11.4]][repo]
-[![Install Status][12.1]][repo]
-[![Install Status][12.2]][repo]
+[![Install Status][11.4]][results]
+[![Install Status][12.1]][results]
+[![Install Status][12.2]][results]
 
 [homeassistant]:https://img.shields.io/pypi/v/homeassistant?label=Home%20Assistant&logo=home-assistant&style=for-the-badge
 [plugin]:https://img.shields.io/github/v/tag/tprelog/test?label=Plugin%20Version&logo=truenas&style=for-the-badge
