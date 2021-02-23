@@ -2,6 +2,8 @@ freebsd_instance:
   cpu: 4
   memory: "4"
 
+only_if: $CIRRUS_BRANCH == 'master' || $CIRRUS_TAG != '' || $CIRRUS_PR != ''
+
 install_template: &INSTALL_PLUGIN
   requirements_script: pkg install -y jq
   install_script: |
@@ -94,24 +96,11 @@ install_template: &INSTALL_PLUGIN
       ./plugin/post_update.sh
     fi
 
-# Tasks are WET only to show a badge for each version of FreeBSD
-# Is there another way to do this, and be DRY about it ?
-homeassistant-11-4_task:
-  <<: *INSTALL_PLUGIN
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-11-4
-  env:
-    PLUGIN_FILE: "homeassistant.json"
 
-homeassistant-12-1_task:
-  <<: *INSTALL_PLUGIN
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-  env:
-    PLUGIN_FILE: "homeassistant.json"
+## Tasks are WET only to show a badge for each version of FreeBSD
+## Is there another way to do this, and be DRY about it ?
 
+# -- HOME ASSISTANT CORE ----------------------------------------
 homeassistant-12-2_task:
   <<: *INSTALL_PLUGIN
   matrix:
@@ -119,3 +108,20 @@ homeassistant-12-2_task:
         image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "homeassistant.json"
+#
+homeassistant-12-1_task:
+  <<: *INSTALL_PLUGIN
+  matrix:
+    - freebsd_instance:
+        image_family: freebsd-12-1
+  env:
+    PLUGIN_FILE: "homeassistant.json"
+#
+homeassistant-11-4_task:
+  <<: *INSTALL_PLUGIN
+  matrix:
+    - freebsd_instance:
+        image_family: freebsd-11-4
+  env:
+    PLUGIN_FILE: "homeassistant.json"
+## ------------------------------------------
