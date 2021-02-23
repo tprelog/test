@@ -1,7 +1,7 @@
 {
   "name": "homeassistant",
   "release": "12.1-RELEASE",
-  "artifact": "https://github.com/tprelog/iocage-test.git",
+  "artifact": "https://github.com/tprelog/test.git",
   "official": "false",
   "devfs_ruleset": {
     "paths": {
