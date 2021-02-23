@@ -198,7 +198,7 @@ homeassistant_script() {
   local _args_="${*}"
   homeassistant_precmd
   # shellcheck disable=SC2016
-  su ${homeassistant_user} -c '
+  su - ${homeassistant_user} -c '
     source ${1}/bin/activate || exit 1
     hass --script ${2} ${3}
     deactivate
@@ -248,12 +248,12 @@ homeassistant_install() {
     err 1 "${name} is not installed: ${homeassistant_venv}"
   fi
   # shellcheck disable=SC2016
-  su ${homeassistant_user} -c '
+  su - ${homeassistant_user} -c '
     if [ ${1} == "YES" ]; then
       ${2} -m venv ${3}
       source ${3}/bin/activate || exit 1
       shift 3
-      pip install --upgrade pip wheel
+      pip install wheel
       pip install ${@}
     else
       source ${3}/bin/activate || exit 1
@@ -289,7 +289,7 @@ homeassistant_reinstall() {
   read -rp " Type 'YES' to clear cache: " _ans2_
   if [ "$(echo "${_ans2_:-"NO"}" | tr '[:lower:]' '[:upper:]')" == "YES" ]; then
     # shellcheck disable=SC2016
-    su ${homeassistant_user} -c '
+    su - ${homeassistant_user} -c '
       source ${1}/bin/activate || exit
       pip cache purge
       deactivate
@@ -307,7 +307,7 @@ homeassistant_test() {
   homeassistant_precmd
   ## Switch users / activate virtualenv / run a command
   # shellcheck disable=SC2016
-  su "${homeassistant_user}" -c '
+  su - "${homeassistant_user}" -c '
     echo -e "  $(pwd)\n"
     source ${1}/bin/activate
     echo "  $(python --version)"
