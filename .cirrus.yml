@@ -2,7 +2,7 @@ freebsd_instance:
   cpu: 4
   memory: "4"
 
-only_if: $CIRRUS_BRANCH == 'master' || $CIRRUS_TAG != '' || $CIRRUS_PR != ''
+only_if: $CIRRUS_CHANGE_MESSAGE == 'test install' || $CIRRUS_BRANCH == 'master' || $CIRRUS_TAG == 'v0-test' || $CIRRUS_PR != ''
 
 install_template: &INSTALL_PLUGIN
   requirements_script: pkg install -y jq
